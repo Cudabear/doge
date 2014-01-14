@@ -1,7 +1,7 @@
 ###########
 #Ignore sass cashe
 .sass-cache/
-.node_modules/
+node_modules/
 
 #########
 #Ignore compiled css
