@@ -1,0 +1,59 @@
+<html>
+<head>
+    <title>doge</title>
+    
+    <!--doge stylesheets -->
+    <style type="text/css">
+        body { padding: 0; margin: 0; background-color: gray;}
+
+        #footer{line-height: 35px; color: white; height: 35px; width: 100%; background: transparent; padding:0px 5px; box-sizing: border-box;}
+        #footer #text { float:left;}
+        #footer #powered_text {float: right; padding-right: 10px;}
+        #footer #img {height: 35px; float: right;}
+        #footer #img img { height: 35px;}
+        #game { margin-left: auto; margin-right: auto; width: 960px; height: 720px; overflow-y: hidden;}
+        #splash {width: 960px; height: 720px; overflow-y: hidden;}
+        #canvas-container { width: 960px; height: 720px;}
+    </style>
+
+	<!-- Favicon -->
+	<!-- <link rel="shortcut icon" href="http://www.cudascubby.com/favicon.ico"> -->
+
+    <!-- league of urban myths -->
+
+    <script type="text/javascript" src ="client/lib/socket.io/socket.io.js"></script>
+
+    <!-- doge javascripts library files -->
+    <script type="text/javascript" src ="client/lib/phaser/phaser.js"></script>
+    
+     <!-- doge javascripts files -->
+    <script type="text/javascript" src="client/src/input/KeyListener.js"></script>
+    <script type="text/javascript" src="server/src/messages/Messages.js"></script>
+    <script type="text/javascript" src="client/src/socket/SocketHandlers.js"></script>
+    <script type="text/javascript" src="client/src/player/Player.js"></script>
+    <script type="text/javascript" src="client/src/Game.js"></script>
+
+</head>
+<body>
+    
+    <div id="game">
+        <div id="canvas-container">
+
+        </div>
+    </div>
+
+    <div id="footer"> 
+        <div id="text">
+            <span>Created by Cudabear.  Do not Redistribute without Permission. </span>
+        </div>
+        
+        <div id="img">  
+            <span><a href="https://github.com/photonstorm/phaser"><img src="client/res/img/phaser-logo-small.png" href="https://github.com/photonstorm/phaser"></a></span>
+        </div>
+
+        <div id="powered_text">
+            <span> Powered by </span>
+        </div>
+    </div>
+</body>
+</html>
