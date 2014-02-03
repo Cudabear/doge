@@ -1,13 +1,17 @@
 var util = require('util');
 var io = require('socket.io');
 var Player = require("./player/Player").Player;
+var Bullet = require("./player/Bullet").Bullet;
 var msgs = require("./messages/Messages");
 
 var socket; //socket controller
 var players; //array of connected players
+var bullets; //array of bullets in flight
+var bulletId = 0;
 
 function init(){
 	players = [];
+	bullets = [];
 
 	//listen to port 1338
 	socket = io.listen(1338);
@@ -20,6 +24,19 @@ function init(){
 	});
 
 	setEventHandlers();
+
+	//update bullets every 50 ms
+	setInterval(function(){
+		for(var i = 0; i < bullets.length; i++){
+			bullets[i].update();
+		}
+
+		sendBulletUpdates();
+	}, 50);
+}
+
+function sendBulletUpdates(){
+	socket.sockets.emit("bullet update", {bullets: bullets});
 }
 
 function setEventHandlers(){
@@ -37,6 +54,23 @@ function onSocketConnection(client){
 	client.on('key press', onKeyPress);
 
 	client.on('authorize new player', onAuthorizeNewPlayer);
+
+	client.on('click', onCreateBullet);
+}
+
+function onCreateBullet(){
+	var shootPlayer = playerById(this.id);
+
+	if(!shootPlayer){
+		util.log("Player not found: "+this.id);
+		return;
+	}
+
+	var bullet = new Bullet(shootPlayer.x, shootPlayer.y, shootPlayer.direction);
+	bullet.id = bulletId++;
+	bullets.push(bullet);
+
+	util.log("Player " + shootPlayer.id + " has shot bullet.");
 }
 
 function onClientDisconnect(){
@@ -58,7 +92,7 @@ function onClientDisconnect(){
 }
 
 function onAuthorizeNewPlayer(){
-	var newPlayer = new Player(0, 0);
+	var newPlayer = new Player(0, 0, 0);
 	newPlayer.id = this.id;
 
 	util.log('Authorizing new player: '+this.id);

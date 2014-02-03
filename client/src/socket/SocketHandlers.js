@@ -5,6 +5,7 @@ function setEventHandlers(socket){
 	socket.on(MOVE_PLAYER, onMovePlayer);
 	socket.on(REMOVE_PLAYER, onRemovePlayer);
 	socket.on(AUTHORIZE_NEW_PLAYER, onAuthorizeNewPlayer);
+	socket.on("bullet update", onBulletUpdate);
 }
 
 function onSocketConnected(){
@@ -28,7 +29,7 @@ function onNewPlayer(data){
 function onMovePlayer(data){
 	var movePlayer = playerById(data.id);
 
-	console.log("Moving player of " + data.id + " to x coord" + data.x);
+	//console.log("Moving player of " + data.id + " to x coord" + data.x);
 
 	if(!movePlayer){
 		console.log("Player not found: "+data.id);
@@ -48,6 +49,19 @@ function onRemovePlayer(data){
 	};
 
 	remotePlayers.splice(remotePlayers.indexOf(removePlayer), 1);
+}
+
+function onBulletUpdate(data){
+	for(var i = 0; i < bullets.length; i++){
+		bullets[i].sprite.kill();
+	}
+
+	bullets = [];
+
+	for(var i = 0; i < data.bullets.length; i++){
+		var bullet = new Bullet(game, data.bullets[i].id, data.bullets[i].x, data.bullets[i].y);
+		bullets.push(bullet);
+	}
 }
 
 function onAuthorizeNewPlayer(data){
@@ -73,6 +87,10 @@ function handleInput(){
 	}else if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)){
 		socket.emit(KEY_PRESS, {key: KEY_DOWN});
 	}
+}
+
+function handleClick(){
+	socket.emit("click");
 }
 
 function playerById(id){
