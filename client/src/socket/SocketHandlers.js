@@ -6,6 +6,17 @@ function setEventHandlers(socket){
 	socket.on(REMOVE_PLAYER, onRemovePlayer);
 	socket.on(AUTHORIZE_NEW_PLAYER, onAuthorizeNewPlayer);
 	socket.on("bullet update", onBulletUpdate);
+	socket.on("player update", onPlayerUpdate);
+}
+
+function onPlayerUpdate(data){
+	for(var i = 0; i < data.players.length; i++){
+		var player = playerById(data.players[i].id);
+
+		if(player){
+			player.sprite.rotation = data.players[i].direction;
+		}
+	}
 }
 
 function onSocketConnected(){
@@ -61,6 +72,12 @@ function onBulletUpdate(data){
 	for(var i = 0; i < data.bullets.length; i++){
 		var bullet = new Bullet(game, data.bullets[i].id, data.bullets[i].x, data.bullets[i].y);
 		bullets.push(bullet);
+	}
+}
+
+function updatePlayerRotation(){
+	if(localPlayer){
+		socket.emit("rotate", {direction: localPlayer.sprite.rotation});
 	}
 }
 

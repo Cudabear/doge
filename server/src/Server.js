@@ -32,11 +32,16 @@ function init(){
 		}
 
 		sendBulletUpdates();
+		sendPlayerUpdates();
 	}, 50);
 }
 
 function sendBulletUpdates(){
 	socket.sockets.emit("bullet update", {bullets: bullets});
+}
+
+function sendPlayerUpdates(){
+	socket.sockets.emit("player update", {players: players});
 }
 
 function setEventHandlers(){
@@ -56,6 +61,19 @@ function onSocketConnection(client){
 	client.on('authorize new player', onAuthorizeNewPlayer);
 
 	client.on('click', onCreateBullet);
+
+	client.on('rotate', onRotate);
+}
+
+function onRotate(data){
+	var shootPlayer = playerById(this.id);
+
+	if(!shootPlayer){
+		util.log("Player not found: "+this.id);
+		return;
+	}
+
+	shootPlayer.direction = data.direction;
 }
 
 function onCreateBullet(){

@@ -14,6 +14,10 @@ window.onload = function(){
 	game = new Phaser.Game(WIDTH, HEIGHT, Phaser.CANVAS, 'canvas-container', {preload: preload, create: create, update: update, render: render});
 
 	connect();
+
+	setInterval(function(){
+		updatePlayerRotation();
+	}, 150);
 }
 
 function connect(){
@@ -31,11 +35,13 @@ function create(){
 	game.stage.backgroundColor = "#333333";
 	game.world.setBounds(-20000, -20000, 60000, 60000);
 
-	 game.input.onDown.add(handleClick, this);
+	game.input.onDown.add(handleClick, this);
 }
 
 function update(){
 	handleInput();
+
+	localPlayer.sprite.rotation = game.physics.angleToPointer(localPlayer.sprite);
 }
 
 function render(){
