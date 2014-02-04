@@ -71,6 +71,7 @@ function onBulletUpdate(data){
 
 	for(var i = 0; i < data.bullets.length; i++){
 		var bullet = new Bullet(game, data.bullets[i].id, data.bullets[i].x, data.bullets[i].y);
+		bullet.sprite.rotation = data.bullets[i].direction;
 		bullets.push(bullet);
 	}
 }

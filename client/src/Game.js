@@ -21,14 +21,14 @@ window.onload = function(){
 }
 
 function connect(){
-	socket = io.connect("http://localhost", {port:1338, transports: ['websocket']});
+	socket = io.connect("http://155.92.68.173", {port:1338, transports: ['websocket']});
 	setEventHandlers(socket);
 
 }
 
 function preload(){
 	game.load.atlasJSONHash('gremlin', 'client/res/img/gremlin.png', 'client/res/anim/gremlin.json');
-	game.load.image('lantern', 'client/res/img/lantern.png');
+	game.load.image('lantern', 'client/res/img/bullet.png');
 }
 
 function create(){
@@ -41,7 +41,9 @@ function create(){
 function update(){
 	handleInput();
 
-	localPlayer.sprite.rotation = game.physics.angleToPointer(localPlayer.sprite);
+	if(localPlayer){
+		localPlayer.sprite.rotation = game.physics.angleToPointer(localPlayer.sprite);
+	}
 }
 
 function render(){

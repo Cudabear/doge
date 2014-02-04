@@ -29,11 +29,30 @@ function init(){
 	setInterval(function(){
 		for(var i = 0; i < bullets.length; i++){
 			bullets[i].update();
+
+			var a = bullets[i];
+
+
+			for(var x = 0; x < players.length; x++){
+				var b = players[x];
+
+
+				if(b){
+					//if collide
+					if((a.owner.id != b.id) && !(((a.y + a.size) < (b.y)) ||
+			        (a.y > (b.y + b.size)) ||
+			        ((a.x + a.size) < b.x) ||
+			        (a.x > (b.x + b.size)))){
+						players[x].health-=10;
+						bullets.splice(i,1);
+					}
+				}
+			}
 		}
 
 		sendBulletUpdates();
 		sendPlayerUpdates();
-	}, 50);
+	}, 30);
 }
 
 function sendBulletUpdates(){
@@ -84,11 +103,12 @@ function onCreateBullet(){
 		return;
 	}
 
-	var bullet = new Bullet(shootPlayer.x, shootPlayer.y, shootPlayer.direction);
+	var angle = shootPlayer.direction;
+	var dx = Math.cos(angle)*10;
+	var dy = Math.sin(angle)*20;
+	var bullet = new Bullet(shootPlayer, shootPlayer.x + dx, shootPlayer.y + dy, shootPlayer.direction);
 	bullet.id = bulletId++;
 	bullets.push(bullet);
-
-	util.log("Player " + shootPlayer.id + " has shot bullet.");
 }
 
 function onClientDisconnect(){

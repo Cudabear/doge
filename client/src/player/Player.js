@@ -1,5 +1,6 @@
 var Player = function(gameInstance, id, x, y){
 	this.id = id;
+	this.health = 100;
 
 	this.sprite = gameInstance.add.sprite(x, y, 'gremlin');
 	this.sprite.anchor.setTo(0.5, 0.5);
